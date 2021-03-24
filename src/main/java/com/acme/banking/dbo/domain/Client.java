@@ -6,9 +6,9 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Client {
-    private UUID id;
+    private int id;
     private String name;
-    private Collection<UUID> accountIds = new ArrayList<>(); //TODO
+    private Collection<Account> accounts = new ArrayList<>(); //TODO
 
     public Client(UUID id, String name) {
         //Guard clauses
@@ -19,7 +19,7 @@ public class Client {
         this.name = name;
     }
 
-    public UUID getId() {
+    public int getId() {
         return id;
     }
 

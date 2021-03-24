@@ -17,8 +17,7 @@ public class Branch {
     }
 
     public Collection<Branch> getChildren() {
-        //TODO
-        return null;
+        return null; //TODO
     }
 
     public String getName() {

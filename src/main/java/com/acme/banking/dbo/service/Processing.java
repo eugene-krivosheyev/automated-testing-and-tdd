@@ -2,9 +2,9 @@ package com.acme.banking.dbo.service;
 
 import com.acme.banking.dbo.domain.Account;
 import com.acme.banking.dbo.domain.Cash;
+import com.acme.banking.dbo.domain.Client;
 
 import java.util.Collection;
-import java.util.UUID;
 
 
 // http://192.168.83.148
@@ -29,12 +29,11 @@ public class Processing {
         return repository.getAllAccountsByClientId(clientId);
     }
 
-    public void transfer(double amount, UUID fromAccountId, UUID toAccountId) {
-
+    public void transfer(int fromAccountId, int toAccountId, double amount) {
+        //TODO
     }
 
-    public void cash(double amount, UUID fromAccountId) {
-
+    public void cash(double amount, int fromAccountId) {
         Cash.log(amount, fromAccountId);
     }
 }
