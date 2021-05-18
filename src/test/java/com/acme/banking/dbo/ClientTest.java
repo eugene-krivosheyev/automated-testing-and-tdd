@@ -1,53 +1,77 @@
 package com.acme.banking.dbo;
 
+import com.acme.banking.dbo.domain.Account;
 import com.acme.banking.dbo.domain.Client;
-import org.junit.jupiter.api.Disabled;
+import com.acme.banking.dbo.domain.SavingAccount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
-
-
-@DisplayName("Test suite")
+@DisplayName("Client class tests")
 public class ClientTest {
-    @Test @Disabled("temporary disabled")
-    @DisplayName("Test case")
+    @Test
     public void shouldStorePropertiesWhenCreated() {
-        //region given
         final int clientId = 1;
         final String clientName = "dummy client name";
-        //endregion
 
-        //region when
         Client sut = new Client(clientId, clientName);
         assumeTrue(sut != null);
-        //endregion
 
-        //region then
-        //Junit5:
         assertAll("Client store its properties",
                 () -> assertEquals(clientId, sut.getId()),
                 () -> assertEquals(clientName, sut.getName())
         );
+    }
 
-        //Hamcrest:
-        assertThat(sut,
-            allOf(
-                hasProperty("id", notNullValue()),
-                hasProperty("id", equalTo(clientId)),
-                hasProperty("name", is(clientName))
-        ));
+    @Test
+    public void shouldThrowIllegalArgumentExceptionWhenIdIsNegative() {
+        final int clientId = -1;
+        final String clientName = "dummy client name";
 
-        //AssertJ:
-        org.assertj.core.api.Assertions.assertThat(sut)
-                .hasFieldOrPropertyWithValue("id", clientId)
-                .hasFieldOrPropertyWithValue("name", clientName);
-        //endregion
+        Executable sut = () -> new Client(clientId, clientName);
+
+        assertThrows(
+                IllegalArgumentException.class,
+                sut,
+                "Client id should be positive!");
+    }
+
+    @Test
+    public void shouldThrowIllegalArgumentExceptionWhenNameIsNull() {
+        final int clientId = 1;
+        final String clientName = null;
+
+        Executable sut = () -> new Client(clientId, clientName);
+
+        assertThrows(
+                IllegalArgumentException.class,
+                sut,
+                "Client name should be not null!");
+    }
+
+    @Test
+    public void shouldThrowIllegalArgumentExceptionWhenNameIsEmpty() {
+        final int clientId = 1;
+        final String clientName = "";
+
+        Executable sut = () -> new Client(clientId, clientName);
+
+        assertThrows(
+                IllegalArgumentException.class,
+                sut,
+                "Client name should be not empty!");
+    }
+
+    @Test
+    public void shouldContainsAccountWhenAccountForClientWasCreated() {
+        final Client dummyClient = new Client(1, "dummy");
+
+        final Account sut = new SavingAccount(1, dummyClient, 1.0);
+        assumeFalse(dummyClient.getAccounts().isEmpty());
+
+        assertTrue(dummyClient.getAccounts().contains(sut));
     }
 }
